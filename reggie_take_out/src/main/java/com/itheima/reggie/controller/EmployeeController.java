@@ -1,19 +1,109 @@
 package com.itheima.reggie.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.itheima.reggie.common.R;
+import com.itheima.reggie.entity.Employee;
+import com.itheima.reggie.service.IEmployeeService;
+import io.swagger.annotations.Api;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.DigestUtils;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+
 /**
+ * 员工控制器
  * <p>
  * 员工信息 前端控制器
  * </p>
  *
  * @author ilovend
+ * @date 2023/02/12
  * @since 2023-02-06
  */
 @RestController
 @RequestMapping("/employee")
+@Slf4j
+@Api(tags = "员工信息")
 public class EmployeeController {
+
+    /**
+     * 员工服务
+     */
+    @Autowired
+    private IEmployeeService employeeService;
+
+
+    /**
+     * 登录
+     *
+     * @param employee 员工
+     * @param request  请求
+     * @return {@link R}
+     */
+    @PostMapping("/login")
+    public R login(@RequestBody Employee employee, HttpServletRequest request) {
+
+        String password = employee.getPassword();
+        String md5Password = DigestUtils.md5DigestAsHex(password.getBytes());
+
+        LambdaQueryWrapper<Employee> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Employee::getUsername, employee.getUsername());
+        Employee emp = employeeService.getOne(lambdaQueryWrapper);
+
+        if (emp == null) {
+            return R.error("用户名不存在");
+        }
+        if (!emp.getPassword().equals(md5Password)) {
+            return R.error("密码错误");
+        }
+        if (emp.getStatus() == 0) {
+            return R.error("账号已被禁用");
+        }
+
+//        如果登录成功需要在session中存入id 并返回登录成功信息
+        request.getSession().setAttribute("employee", emp.getId());
+        return R.success(emp);
+    }
+
+    /**
+     * 登录了
+     * 登出
+     *
+     * @param request 请求
+     * @return {@link R}
+     */
+    @PostMapping("/logout")
+    public R loginOut(HttpServletRequest request) {
+        request.getSession().invalidate();
+        return R.success("退出成功");
+    }
+
+
+    @PostMapping
+    public R<String> save(HttpServletRequest request,@RequestBody Employee employee){
+        log.info("新增员工，员工信息为：{}",employee);
+
+        //初始密码设置为123456，需要进行MD5加密处理
+        employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
+        employee.setCreateTime(LocalDateTime.now());
+        employee.setUpdateTime(LocalDateTime.now());
+
+        Long empId = (Long) request.getSession().getAttribute("employee");
+
+        employee.setCreateUser(empId);
+        employee.setUpdateUser(empId);
+        employeeService.save(employee);
+        return R.success("新增员工成功");
+
+    }
+
+
 
 }
