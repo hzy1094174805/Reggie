@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 类别控制器
  * <p>
@@ -88,4 +90,17 @@ public class CategoryController {
         categoryService.updateById(category);
         return R.success("分类信息修改成功");
     }
+
+    @GetMapping("/list")
+    public R<List<Category>> list(Category category){
+        LambdaQueryWrapper<Category> categoryLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        categoryLambdaQueryWrapper.eq(category.getType() != null, Category::getType, category.getType());
+
+        categoryLambdaQueryWrapper.orderByAsc(Category::getSort).orderByDesc(Category::getUpdateTime);
+        List<Category> list = categoryService.list(categoryLambdaQueryWrapper);
+        return R.success(list);
+    }
+
+
+
 }
