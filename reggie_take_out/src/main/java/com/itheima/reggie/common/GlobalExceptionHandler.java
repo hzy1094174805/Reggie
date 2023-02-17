@@ -18,7 +18,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 @ControllerAdvice(annotations = {RestController.class, Controller.class})
 @ResponseBody
 @Slf4j
-public class  GlobalExceptionHandler {
+public class GlobalExceptionHandler {
 
 
     /**
@@ -28,13 +28,25 @@ public class  GlobalExceptionHandler {
      * @return {@link R}<{@link String}>
      */
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    public R<String> exceptionHandler(SQLIntegrityConstraintViolationException ex){
+    public R<String> exceptionHandler(SQLIntegrityConstraintViolationException ex) {
         log.error(ex.getMessage());
-        if(ex.getMessage().contains("Duplicate entry")){
+        if (ex.getMessage().contains("Duplicate entry")) {
             String[] split = ex.getMessage().split(" ");
             String msg = split[2] + "已存在";
             return R.error(msg);
         }
         return R.error("未知错误");
+    }
+
+    /**
+     * 在全局异常处理器中增加方法，用于捕获我们自定义的异常 CustomException
+     *
+     * @param ex 前女友
+     * @return {@link R}<{@link String}>
+     */
+    @ExceptionHandler(CustomException.class)
+    public R<String> exceptionHandler(CustomException ex) {
+        log.error(ex.getMessage());
+        return R.error(ex.getMessage());
     }
 }

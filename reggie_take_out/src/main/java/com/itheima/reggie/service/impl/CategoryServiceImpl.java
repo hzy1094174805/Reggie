@@ -1,9 +1,16 @@
 package com.itheima.reggie.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.itheima.reggie.common.CustomException;
 import com.itheima.reggie.entity.Category;
+import com.itheima.reggie.entity.Dish;
+import com.itheima.reggie.entity.Setmeal;
 import com.itheima.reggie.mapper.CategoryMapper;
 import com.itheima.reggie.service.ICategoryService;
+import com.itheima.reggie.service.IDishService;
+import com.itheima.reggie.service.ISetmealService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,5 +23,34 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements ICategoryService {
+    @Autowired
+    private IDishService dishService;
+    @Autowired
+    private ISetmealService setmealService;
 
+    /**
+     * 删除通过id,删除之前需要进行判断,如果该分类下有菜品或者套餐,则不能删除
+     *
+     * @param id id
+     */
+    @Override
+    public void removeById(Long id) {
+//        添加查询条件，根据分类id进行查询菜品数据
+        LambdaQueryWrapper<Dish> dishLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        dishLambdaQueryWrapper.eq(Dish::getCategoryId, id);
+        int count1 = dishService.count(dishLambdaQueryWrapper);
+        if (count1 > 0) {
+            throw new CustomException("该分类下有菜品，不能删除");
+        }//已经关联了菜品，抛出一个业务异常
+
+        LambdaQueryWrapper<Setmeal> setmealLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        setmealLambdaQueryWrapper.eq(Setmeal::getCategoryId, id);
+        int count2 = setmealService.count(setmealLambdaQueryWrapper);
+        if (count2 > 0) {
+            throw new CustomException("该分类下有套餐，不能删除");
+        }//已经关联了套餐，抛出一个业务异常
+
+        super.removeById(id);
+
+    }
 }
