@@ -37,11 +37,13 @@ public class SetmealDish implements Serializable {
 
     @ApiModelProperty(value = "套餐id ")
     @TableField("setmeal_id")
-    private String setmealId;
+//    private String setmealId;
+    private Long setmealId;
 
     @ApiModelProperty(value = "菜品id")
     @TableField("dish_id")
-    private String dishId;
+//    private String dishId;
+    private Long dishId;
 
     @ApiModelProperty(value = "菜品名称 （冗余字段）")
     @TableField("name")

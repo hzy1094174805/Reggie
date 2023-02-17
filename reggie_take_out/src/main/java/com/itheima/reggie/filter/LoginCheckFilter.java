@@ -73,7 +73,7 @@ public class LoginCheckFilter implements Filter {
         //3.如果不需要处理，则直接放行
         if (check) {
             log.info("本次请求{}不需要处理", requestURI);
-            chain.doFilter(request, response);
+            chain.doFilter(req, resp);
             return;
         }
         //4.判断登录状态，如已经登录，则直接放行
@@ -82,7 +82,16 @@ public class LoginCheckFilter implements Filter {
 
             Long empId = (Long) req.getSession().getAttribute("employee");
             BaseContext.setCurrentId(empId);
-            chain.doFilter(request, response);
+            chain.doFilter(req, resp);
+            return;
+        }
+
+        if (req.getSession().getAttribute("user") != null) {
+            log.info("用户已登录，用户id为{}", req.getSession().getAttribute("user"));
+            Long userId = (Long) req.getSession().getAttribute("user");
+            BaseContext.setCurrentId(userId);
+
+            chain.doFilter(req, resp);
             return;
         }
         log.info("用户未登录，跳转到登录页面");
