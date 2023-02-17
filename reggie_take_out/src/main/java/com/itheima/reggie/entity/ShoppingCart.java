@@ -1,6 +1,6 @@
 package com.itheima.reggie.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -32,7 +32,7 @@ public class ShoppingCart implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键")
-    @TableId(value = "id", type = IdType.NONE)
+    @TableId(value = "id")
     private Long id;
 
     @ApiModelProperty(value = "名称")
@@ -67,9 +67,14 @@ public class ShoppingCart implements Serializable {
     @TableField("amount")
     private BigDecimal amount;
 
-    @ApiModelProperty(value = "创建时间")
+    /*@ApiModelProperty(value = "创建时间")
     @TableField("create_time")
+    private LocalDateTime createTime;*/
+
+    @ApiModelProperty(value = "创建时间")
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
+
 
 
 }

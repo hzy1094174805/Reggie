@@ -1,6 +1,6 @@
 package com.itheima.reggie.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -32,7 +32,7 @@ public class SetmealDish implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键")
-    @TableId(value = "id", type = IdType.NONE)
+    @TableId(value = "id")
     private Long id;
 
     @ApiModelProperty(value = "套餐id ")
@@ -59,7 +59,7 @@ public class SetmealDish implements Serializable {
     @TableField("sort")
     private Integer sort;
 
-    @ApiModelProperty(value = "创建时间")
+    /*@ApiModelProperty(value = "创建时间")
     @TableField("create_time")
     private LocalDateTime createTime;
 
@@ -73,6 +73,22 @@ public class SetmealDish implements Serializable {
 
     @ApiModelProperty(value = "修改人")
     @TableField("update_user")
+    private Long updateUser;*/
+
+    @ApiModelProperty(value = "创建时间")
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+
+    @ApiModelProperty(value = "更新时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
+
+    @ApiModelProperty(value = "创建人")
+    @TableField(fill = FieldFill.INSERT)
+    private Long createUser;
+
+    @ApiModelProperty(value = "修改人")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateUser;
 
     @ApiModelProperty(value = "是否删除")

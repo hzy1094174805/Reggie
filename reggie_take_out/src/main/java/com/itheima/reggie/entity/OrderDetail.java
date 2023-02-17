@@ -1,6 +1,5 @@
 package com.itheima.reggie.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -31,7 +30,7 @@ public class OrderDetail implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键")
-    @TableId(value = "id", type = IdType.NONE)
+    @TableId(value = "id")
     private Long id;
 
     @ApiModelProperty(value = "名字")
