@@ -11,6 +11,10 @@ public class BaseContext {
         THREAD_LOCAL.set(id);
     }
 
+    public static Long get(){
+        return THREAD_LOCAL.get();
+    }
+
     public static void removeCurrentId() {
         THREAD_LOCAL.remove();
     }

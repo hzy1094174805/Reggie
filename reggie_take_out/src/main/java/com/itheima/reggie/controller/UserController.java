@@ -50,8 +50,9 @@ public class UserController {
         String phone = user.getPhone();
         if (StringUtils.isNotEmpty(phone)) {
             String code = ValidateCodeUtils.generateValidateCode(4).toString();
-            log.info("验证码={}", code);
+            log.info("验证码={}",code);
 //            SMSUtils.sendMessage("瑞吉外卖", "", phone, code);
+
 
             session.setAttribute(phone, code);
             return R.success("手机验证码发送成功");
@@ -60,7 +61,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public R<User> login(@RequestBody Map map, HttpSession session) {
+    public R<User> login(@RequestBody Map<String, String> map, HttpSession session) {
+
         log.info(map.toString());
         String phone = map.get("phone").toString();
         String code = map.get("code").toString();

@@ -1,5 +1,6 @@
 package com.itheima.reggie.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -43,7 +44,7 @@ public class AddressBook implements Serializable {
 
     @ApiModelProperty(value = "性别 0 女 1 男")
     @TableField("sex")
-    private Integer sex;
+    private String sex;
 
     @ApiModelProperty(value = "手机号")
     @TableField("phone")
@@ -83,22 +84,24 @@ public class AddressBook implements Serializable {
 
     @ApiModelProperty(value = "默认 0 否 1是")
     @TableField("is_default")
-    private Boolean isDefault;
+    private Integer isDefault;
 
     @ApiModelProperty(value = "创建时间")
-    @TableField("create_time")
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
+
     @ApiModelProperty(value = "更新时间")
-    @TableField("update_time")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
     @ApiModelProperty(value = "创建人")
-    @TableField("create_user")
+    @TableField(fill = FieldFill.INSERT)
     private Long createUser;
 
+
     @ApiModelProperty(value = "修改人")
-    @TableField("update_user")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateUser;
 
     @ApiModelProperty(value = "是否删除")

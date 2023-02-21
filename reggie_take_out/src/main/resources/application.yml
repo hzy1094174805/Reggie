@@ -22,4 +22,11 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: ASSIGN_ID
-baseUrl: D:/imgs/
+
+# 七牛云配置
+qiniu:
+  accessKey: CazQQRyp5MiLDR_LiBruYeG7xyShydm_rLArdTJb
+  secretKey: oOlv82H51dZ-rb11H4VOBoQ4Vo9M7kgauE02WqfX
+  bucket: picgoimgs
+  domain: http://cdn.zyboy.site/
+

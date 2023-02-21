@@ -1,19 +1,15 @@
 package com.itheima.reggie.controller;
 
+import com.itheima.reggie.common.QiNiuClient;
 import com.itheima.reggie.common.R;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -29,11 +25,9 @@ import java.util.UUID;
 @Slf4j
 @Api(tags = "图片上传下载")
 public class CommonController {
-    /**
-     * 基url
-     */
-    @Value("${baseUrl}")
-    private String baseUrl;
+
+@Autowired
+private QiNiuClient qiNiuClient;
 
     /**
      * 上传
@@ -49,19 +43,14 @@ public class CommonController {
         String suffix = originalFilename.substring(index);//.jpg
         //随机生成图片的名字  gutrwaestygiutrawstgiuhiset
         String fileName = UUID.randomUUID().toString().replace("-","")+suffix;
-        file.transferTo(new File(baseUrl+fileName));
-        return R.success(fileName);
+        //上传到七牛云
+        String url = qiNiuClient.transferQiNiuOss(fileName, file.getInputStream());
+        return R.success(url);
     }
 
-    /**
-     * 上传
-     *
-     * @param name     名字
-     * @param response 响应
-     * @throws IOException ioexception
-     */
+/*
     @GetMapping("/download")
-    public void upload(String name, HttpServletResponse response) throws IOException {
+    public void download(String name, HttpServletResponse response) throws IOException {
         //获取文件的输入流
         FileInputStream fileInputStream = new FileInputStream(baseUrl + name);
         ServletOutputStream outputStream = response.getOutputStream();
@@ -74,5 +63,5 @@ public class CommonController {
             outputStream.flush();
         }
         fileInputStream.close();
-    }
+    }*/
 }

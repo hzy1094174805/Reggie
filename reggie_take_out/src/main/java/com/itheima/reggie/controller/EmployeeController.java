@@ -14,6 +14,7 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 /**
  * 员工控制器
@@ -58,11 +59,15 @@ public class EmployeeController {
         if (emp == null) {
             return R.error("用户名不存在");
         }
-        if (!emp.getPassword().equals(md5Password)) {
-            return R.error("密码错误");
-        }
+
         if (emp.getStatus() == 0) {
             return R.error("账号已被禁用");
+        }
+
+        String salt = emp.getPassword().substring(32);
+        String miwen = DigestUtils.md5DigestAsHex((employee.getPassword() + salt).getBytes()) + salt;
+        if (!miwen.equals(emp.getPassword())) {
+            return R.error("密码错误");
         }
 
 //        如果登录成功需要在session中存入id 并返回登录成功信息
@@ -96,7 +101,10 @@ public class EmployeeController {
         log.info("新增员工，员工信息为：{}", employee);
 
         //初始密码设置为123456，需要进行MD5加密处理
-        employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
+        String salt = UUID.randomUUID().toString().replace("-", "");
+        String md5Password = DigestUtils.md5DigestAsHex(("123456" + salt).getBytes()) + salt;
+        employee.setPassword(md5Password);
+
 /*        employee.setCreateTime(LocalDateTime.now());
         employee.setUpdateTime(LocalDateTime.now());
 

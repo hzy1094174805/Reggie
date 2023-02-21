@@ -1,6 +1,5 @@
 package com.itheima.reggie.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -72,7 +71,7 @@ public class ShoppingCart implements Serializable {
     private LocalDateTime createTime;*/
 
     @ApiModelProperty(value = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
+//    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
 

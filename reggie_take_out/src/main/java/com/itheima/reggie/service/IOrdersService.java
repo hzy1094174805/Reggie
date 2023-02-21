@@ -1,6 +1,8 @@
 package com.itheima.reggie.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.itheima.reggie.dto.OrdersDto;
 import com.itheima.reggie.entity.Orders;
 
 /**
@@ -13,4 +15,7 @@ import com.itheima.reggie.entity.Orders;
  */
 public interface IOrdersService extends IService<Orders> {
 
+    void submit(Orders orders);
+
+    Page<OrdersDto> page(Integer page, Integer pageSize);
 }
