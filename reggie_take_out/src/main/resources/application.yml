@@ -9,6 +9,11 @@ spring:
       url: jdbc:mysql://localhost:3306/reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: root
       password: 123456
+  redis:
+    host: 1.12.252.196
+    port: 25566
+    password: Hzy1422045654
+    database: 0
 #  mvc:
 #    static-path-pattern: /**
 #  web:
@@ -29,4 +34,6 @@ qiniu:
   secretKey: oOlv82H51dZ-rb11H4VOBoQ4Vo9M7kgauE02WqfX
   bucket: picgoimgs
   domain: http://cdn.zyboy.site/
+
+#Redis配置
 
