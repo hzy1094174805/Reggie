@@ -14,6 +14,9 @@ spring:
     port: 25566
     password: Hzy1422045654
     database: 0
+  cache:
+    redis:
+      time-to-live: 1800000 #设置缓存时间为30分钟
 #  mvc:
 #    static-path-pattern: /**
 #  web:

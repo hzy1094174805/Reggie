@@ -102,17 +102,7 @@ public class DishController {
         dishService.page(pageInfo, queryWrapper);
         BeanUtils.copyProperties(pageInfo, dishDtoPage, "records");
         List<Dish> records = pageInfo.getRecords();
-        List<DishDto> list = records.stream().map((item) -> {
-            DishDto dishDto = new DishDto();
-            BeanUtils.copyProperties(item, dishDto);
-            Long categoryId = item.getCategoryId();
-            Category category = categoryService.getById(categoryId);
-            if (category != null) {
-                String categoryName = category.getName();
-                dishDto.setCategoryName(categoryName);
-            }
-            return dishDto;
-        }).collect(Collectors.toList());
+        List<DishDto> list = records.stream().map(this::apply).collect(Collectors.toList());
         dishDtoPage.setRecords(list);
         return R.success(dishDtoPage);
     }
@@ -192,4 +182,15 @@ public class DishController {
     }
 
 
+    private DishDto apply(Dish item) {
+        DishDto dishDto = new DishDto();
+        BeanUtils.copyProperties(item, dishDto);
+        Long categoryId = item.getCategoryId();
+        Category category = categoryService.getById(categoryId);
+        if (category != null) {
+            String categoryName = category.getName();
+            dishDto.setCategoryName(categoryName);
+        }
+        return dishDto;
+    }
 }

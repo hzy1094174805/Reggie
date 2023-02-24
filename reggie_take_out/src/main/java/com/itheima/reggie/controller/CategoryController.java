@@ -91,6 +91,7 @@ public class CategoryController {
         return R.success("分类信息修改成功");
     }
 
+
     @GetMapping("/list")
     public R<List<Category>> list(Category category){
         LambdaQueryWrapper<Category> categoryLambdaQueryWrapper = new LambdaQueryWrapper<>();
